@@ -9,6 +9,8 @@
 import GyUtils
 import sys
 import time
+import datetime
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 logging = GyUtils.logger("log_movies.log")
@@ -17,21 +19,25 @@ class MainTask():
     def __init__(self):
         self.referer = 'http://www.jisudhw.com'
 
+    def to_date(self, dateStr):
+
+        return datetime.datetime.strptime(dateStr.strip(), "%Y-%m-%d %H:%M:%S")
+
     def action_step_one(self, url,last_date):
         soup = GyUtils.request_get(url)
         # soup = GyUtils.readText("html.txt")
         data = []
         if soup:
-            div = soup.find_all(name="div", attrs={"class": "xing_vb"})[0].find_all("li")
-            for ddd in div:
-                span = ddd.find(name="span", attrs={"class": "xing_vb4"})
-                update_date = ddd.find(name="span", attrs={"class": "xing_vb6"}).text
-                if span:
-                    a = span.find(name='a')
-                    href = self.referer + a.get("href")
-                    name = a.text
-                    if self.to_date(update_date) > self.to_date(last_date):
-                        data.append((href, name))
+            tt = soup.find_all(name="span", attrs={"class": "tt"})
+            for span in tt:
+
+                li =  span.parent
+                vb4 = li.find(name="span", attrs={"class": "xing_vb4"})
+                update_date = li.find(name="span", attrs={"class": "xing_vb6"}).text
+                name = vb4.text
+                href = self.referer + vb4.find("a").get("href")
+                if self.to_date(update_date+" 00:00:00") > self.to_date(last_date):
+                    data.append((href, name))
         return data
 
     def action_step_two(self, url):
@@ -65,6 +71,12 @@ class MainTask():
                     film_url = film_url + bof_url + "#"
             filmInfo["film_url"] = film_url[0:-1]
             return filmInfo
+
+if __name__ == '__main1111__':
+    task = MainTask()
+    data = task.action_step_one("http://www.jisudhw.com/?m=vod-type-id-5.html","1997-01-02 12:12:12")
+    for d in data :
+        print d
 
 
 if __name__ == '__main__':
