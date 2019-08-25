@@ -48,20 +48,20 @@ class MainTask():
             vodBox = soup.find(name="div", attrs={"class": "vodBox"})
             filmInfo["uuid"] = int(time.time() * 1000000)
             filmInfo["film_pic"] = vodBox.find("img").get("src")
-            filmInfo["film_name"] = vodBox.find("h2").text
+            filmInfo["film_name"] = vodBox.find("h2").text.replace("'", "`")
             vodinfobox = vodBox.find("div", attrs={"class": "vodinfobox"})
             lis = vodinfobox.find_all("li")
             filmInfo["film_alias"] = lis[0].text.replace("'", "`")
-            filmInfo["film_director"] = lis[1].text
-            filmInfo["film_stars"] = lis[2].text
-            filmInfo["film_column"] = lis[3].text
-            filmInfo["film_area"] = lis[4].text
+            filmInfo["film_director"] = lis[1].text.replace("'", "`")
+            filmInfo["film_stars"] = lis[2].text.replace("'", "`")
+            filmInfo["film_column"] = lis[3].text.replace("'", "`")
+            filmInfo["film_area"] = lis[4].text.replace("'", "`")
             filmInfo["film_language"] = lis[5].text
             filmInfo["film_release_year"] = lis[6].text
             filmInfo["film_time_length"] = lis[7].text
             filmInfo["film_update_time"] = lis[8].text
             filmInfo["film_score"] = lis[11].text
-            filmInfo["film_type"] = lis[14].text
+            filmInfo["film_type"] = lis[14].text.replace("'", "`")
             filmInfo["film_nr"] = soup.find_all(name="div", attrs={"class": "vodplayinfo"})[1].text.replace("'","`")
             inputs = soup.find_all(name="input", attrs={"name": "copy_sel"})
             film_url = ""
