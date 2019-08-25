@@ -93,6 +93,7 @@ if __name__ == '__main__':
             dat = dat[3:]
         if not dat:
             dat = "1970-01-01 00:00:00"
+        logging.info("<<{}>>的上次爬取时间是{}".format(type[i-5],dat))
         data = task.action_step_one(url,dat)
         for href, name in data:
             filmInfo = task.action_step_two(href)
@@ -109,6 +110,7 @@ if __name__ == '__main__':
                 cursor.execute(sql_url)
             cursor.execute("commit")
             logging.info("<<{}>>  save done".format(filmInfo["film_name"]))
+        logging.info(url+">>>>> success")
 
 
 
