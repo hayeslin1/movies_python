@@ -40,7 +40,7 @@ def request_get(url):
 
 
 def request_post(url, data):
-    r = requests.get(url, headers=header, data=data, timeout=10)
+    r = requests.post(url, headers=header, data=data, timeout=10)
     if r.status_code is 200:
         # logging.info("数据加载完成........")
         soup = BeautifulSoup(r.content, 'lxml')
@@ -99,6 +99,7 @@ User_Agents = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.20 (KHTML, like Gecko) Chrome/19.0.1036.7 Safari/535.20",
     "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52"]
 header = {
+    'Content-Type': 'application/x-www-form-urlencoded',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
     'Accept-Encoding': 'gzip, deflate',
     'Accept-Language': 'zh-CN,zh;q=0.8',
