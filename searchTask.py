@@ -51,9 +51,7 @@ if __name__ == '__main__':
         if row:
             href_film = data[row-1][2]
 
-
-
-    if href_film > -1:
+    if href_film:
         m = MainTask.MainTask()
         filmInfo = m.action_step_two(href_film)
         bof_urls = filmInfo["film_url"].split("#")
