@@ -47,25 +47,28 @@ if __name__ == '__main__':
         for i in range(len(data)):
             print "标号:", i+1 , "   >>> 资源 : ", data[i][0], data[i][1] ,data[i][2]
 
-        row = input('请输入前面的标号:(0 不做选择)')
+        row = raw_input('请输入前面的标号:(不选可直接回车)')
         if row:
-            href_film = data[row-1][2]
+            rowi = row.split(",")[::-1]
+            for i in rowi :
+                ri = int(i)
+                href_film = data[ri-1][2]
 
-    if href_film:
-        m = MainTask.MainTask()
-        filmInfo = m.action_step_two(href_film)
-        bof_urls = filmInfo["film_url"].split("#")
-        filmInfo.pop("film_url")
-        sql = GyUtils.dict_2_insert_sql(filmInfo, "t_movies")
-        logging.info(sql)
-        cursor = GyUtils.mysql_connect_cursor()
-        cursor.execute(sql)
+                if href_film:
+                    m = MainTask.MainTask()
+                    filmInfo = m.action_step_two(href_film)
+                    bof_urls = filmInfo["film_url"].split("#")
+                    filmInfo.pop("film_url")
+                    sql = GyUtils.dict_2_insert_sql(filmInfo, "t_movies")
+                    logging.info(sql)
+                    cursor = GyUtils.mysql_connect_cursor()
+                    cursor.execute(sql)
 
-        for bof_url in bof_urls:
-            sql_url = "insert into t_movies_url (uuid,film_name,film_url)values ('%s' , '%s' , '%s' )" \
-                      % (filmInfo["uuid"], filmInfo["film_name"], bof_url)
-            logging.info(sql_url)
-            cursor.execute(sql_url)
-        cursor.execute("commit")
-        logging.info("<<{}>>  save done".format(filmInfo["film_name"]))
+                    for bof_url in bof_urls:
+                        sql_url = "insert into t_movies_url (uuid,film_name,film_url)values ('%s' , '%s' , '%s' )" \
+                                  % (filmInfo["uuid"], filmInfo["film_name"], bof_url)
+                        logging.info(sql_url)
+                        cursor.execute(sql_url)
+                    cursor.execute("commit")
+                    logging.info("<<{}>>  save done".format(filmInfo["film_name"]))
 
