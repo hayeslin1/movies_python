@@ -33,10 +33,10 @@ class MainTask():
 
                 li =  span.parent
                 vb4 = li.find(name="span", attrs={"class": "xing_vb4"})
-                update_date = li.find(name="span", attrs={"class": "xing_vb6"}).text
+                update_date = li.find(name="span", attrs={"class": "xing_vb7"}).text
                 name = vb4.text
                 href = self.referer + vb4.find("a").get("href")
-                if self.to_date(update_date+" 00:00:00") > self.to_date(last_date):
+                if self.to_date(update_date) > self.to_date(last_date):
                     data.append((href, name))
         return data
 
