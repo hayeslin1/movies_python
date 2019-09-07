@@ -47,8 +47,10 @@ class MainTask():
         if soup:
             vodBox = soup.find(name="div", attrs={"class": "vodBox"})
             filmInfo["uuid"] = int(time.time() * 1000000)
+            filmInfo["film_href"] = url
             filmInfo["film_pic"] = vodBox.find("img").get("src")
             filmInfo["film_name"] = vodBox.find("h2").text.replace("'", "`")
+            filmInfo["film_notes"] = vodBox.find("span").text.replace("'", "`")
             vodinfobox = vodBox.find("div", attrs={"class": "vodinfobox"})
             lis = vodinfobox.find_all("li")
             filmInfo["film_alias"] = lis[0].text.replace("'", "`")
@@ -99,6 +101,7 @@ if __name__ == '__main__':
             filmInfo = task.action_step_two(href)
             bof_urls = filmInfo["film_url"].split("#")
             filmInfo.pop("film_url")
+            filmInfo["film_column"] = type[i-5]
             sql = GyUtils.dict_2_insert_sql(filmInfo,"t_movies")
             logging.info(sql)
             cursor.execute(sql)
