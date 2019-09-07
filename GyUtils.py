@@ -75,7 +75,7 @@ def mysql_connect_cursor(
     host = '111.67.197.161',
     user = 'root',
     pasd = '1qaz!QAZ',
-    db = 'hayes'):
+    db = 'movies'):
     try:
         conn = pymysql.connect(host=host, port=3306, user=user, password=pasd, db=db, charset='utf8',
                                cursorclass=pymysql.cursors.DictCursor)
