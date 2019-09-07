@@ -11,6 +11,11 @@ import requests
 import random
 from bs4 import BeautifulSoup
 import pymysql
+import time
+import datetime
+
+
+referer = 'http://www.jisudhw.com'
 
 
 # 记录日志
@@ -79,6 +84,63 @@ def mysql_connect_cursor(
         logging.error(e.message)
         exit(3306)
     return conn.cursor()  # 获取一个游标
+
+
+def to_date(dateStr):
+
+        return datetime.datetime.strptime(dateStr.strip(), "%Y-%m-%d %H:%M:%S")
+
+def action_step_one(url, last_date):
+    soup = request_get(url)
+    # soup = GyUtils.readText("html.txt")
+    data = []
+    if soup:
+        tt = soup.find_all(name="span", attrs={"class": "tt"})
+        for span in tt:
+
+            li = span.parent
+            vb4 = li.find(name="span", attrs={"class": "xing_vb4"})
+            update_date = li.find(name="span", attrs={"class": "xing_vb6"}).text
+            name = vb4.text
+            href = referer + vb4.find("a").get("href")
+            if to_date(update_date + " 00:00:00") > to_date(last_date):
+                data.append((href, name))
+    return data
+
+
+def action_step_two(url):
+    soup = request_get(url)
+    # soup = GyUtils.readText("html2.txt")
+    filmInfo = {}
+    if soup:
+        vodBox = soup.find(name="div", attrs={"class": "vodBox"})
+        filmInfo["uuid"] = int(time.time() * 1000000)
+        filmInfo["film_href"] = url
+        filmInfo["film_pic"] = vodBox.find("img").get("src")
+        filmInfo["film_name"] = vodBox.find("h2").text.replace("'", "`")
+        filmInfo["film_notes"] = vodBox.find("span").text.replace("'", "`")
+        vodinfobox = vodBox.find("div", attrs={"class": "vodinfobox"})
+        lis = vodinfobox.find_all("li")
+        filmInfo["film_alias"] = lis[0].text.replace("'", "`")
+        filmInfo["film_director"] = lis[1].text.replace("'", "`")
+        filmInfo["film_stars"] = lis[2].text.replace("'", "`")
+        filmInfo["film_column"] = lis[3].text.replace("'", "`")
+        filmInfo["film_area"] = lis[4].text.replace("'", "`")
+        filmInfo["film_language"] = lis[5].text
+        filmInfo["film_release_year"] = lis[6].text
+        filmInfo["film_time_length"] = lis[7].text
+        filmInfo["film_update_time"] = lis[8].text
+        filmInfo["film_score"] = lis[11].text
+        filmInfo["film_type"] = lis[14].text.replace("'", "`")
+        filmInfo["film_nr"] = soup.find_all(name="div", attrs={"class": "vodplayinfo"})[1].text.replace("'", "`")
+        inputs = soup.find_all(name="input", attrs={"name": "copy_sel"})
+        film_url = ""
+        for input in inputs:
+            bof_url = input.parent.text
+            if not (str(bof_url).endswith("m3u8")) and not (str(bof_url).endswith("mp4")):
+                film_url = film_url + bof_url + "#"
+        filmInfo["film_url"] = film_url[0:-1]
+        return filmInfo
 
 
 User_Agents = [

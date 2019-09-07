@@ -9,15 +9,17 @@
 
 # ==========================================
 
-from MainTask import *
+import GyUtils
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+logging = GyUtils.logger("log_TV.log")
 
 class doTask():
-    def __init__(self):
-        self.referer = 'http://www.jisudhw.com'
+
 
     def action(self, cursor):
 
-        task = MainTask()
         type = ['国产剧', '香港剧', '韩国剧', '欧美剧', '台湾剧', '日本剧', '海外剧']
         for i in range(12, 19):
             url = 'http://www.jisudhw.com/?m=vod-type-id-{}.html'.format(i)
@@ -29,9 +31,9 @@ class doTask():
             if not dat:
                 dat = "1970-01-01 00:00:00"
             logging.info("<<{}>>的上次爬取时间是{}".format(type[i - 12], dat))
-            data = task.action_step_one(url, dat)
+            data = GyUtils.action_step_one(url, dat)
             for href, name in data:
-                filmInfo = task.action_step_two(href)
+                filmInfo = GyUtils.action_step_two(href)
                 sql = "select count(1) ct from t_television where film_name = '{}'".format(filmInfo["film_name"])
                 cursor.execute(sql)
                 has = cursor.fetchone()['ct']
@@ -55,7 +57,6 @@ class doTask():
             logging.info(url + ">>>>> success")
 
     def updateDataBase(self, cursor):
-        mt = MainTask()
         sql = r"SELECT * from t_television where film_notes not like '%完结'"
         cursor.execute(sql)
         mysqlData = cursor.fetchall();
@@ -67,7 +68,7 @@ class doTask():
             muchJi = cursor.fetchone()['ct']
 
             film_href = ddd['film_href']
-            filmInfo = mt.action_step_two(film_href)
+            filmInfo = GyUtils.action_step_two(film_href)
             if not filmInfo:
                 continue
             bof_urls = filmInfo["film_url"].split("#")
@@ -84,13 +85,6 @@ class doTask():
             else:
                 logging.info("<<" + filmInfo["film_name"] + ">> 暂无更新")
 
-    def getNavigation(self, url):
-        # soup = GyUtils.request_get(url)
-        soup = GyUtils.readText("html.txt")
-        div = soup.find("div", attrs={'class': 'sddm'})
-        asss = div.find_all("a")
-        for a in asss:
-            print a
 
 
 if __name__ == '__main__':
@@ -99,4 +93,3 @@ if __name__ == '__main__':
     dt = doTask()
     dt.updateDataBase(cursor)
     dt.action(cursor);
-    # dt.getNavigation(url)
