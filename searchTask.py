@@ -6,11 +6,10 @@
 
 import GyUtils
 import sys
-import MainTask
-import logging
 
 reload(sys)
 sys.setdefaultencoding('utf8')
+logging = GyUtils.logger("log_search.log")
 
 class doTask():
     def __init__(self, data):
@@ -55,20 +54,29 @@ if __name__ == '__main__':
                 href_film = data[ri-1][2]
 
                 if href_film:
-                    m = MainTask.MainTask()
-                    filmInfo = m.action_step_two(href_film)
-                    bof_urls = filmInfo["film_url"].split("#")
-                    filmInfo.pop("film_url")
-                    sql = GyUtils.dict_2_insert_sql(filmInfo, "t_movies")
-                    logging.info(sql)
-                    cursor = GyUtils.mysql_connect_cursor()
-                    cursor.execute(sql)
+                    filmInfo = GyUtils.action_step_two(href_film)
+                    if filmInfo:
+                        bof_urls = filmInfo["film_url"].split("#")
+                        filmInfo.pop("film_url")
+                        sql = "" ;
+                        if data[ri-1][1].endswith("片"):
+                            sql = GyUtils.dict_2_insert_sql(filmInfo, "t_movies")
+                        elif data[ri-1][1].endswith("剧"):
+                            sql = GyUtils.dict_2_insert_sql(filmInfo, "t_television")
+                        elif data[ri-1][1].endswith("动漫"):
+                            sql = GyUtils.dict_2_insert_sql(filmInfo, "t_anime")
+                        elif data[ri-1][1].endswith("综艺"):
+                            sql = GyUtils.dict_2_insert_sql(filmInfo, "t_media")
 
-                    for bof_url in bof_urls:
-                        sql_url = "insert into t_movies_url (uuid,film_name,film_url)values ('%s' , '%s' , '%s' )" \
-                                  % (filmInfo["uuid"], filmInfo["film_name"], bof_url)
-                        logging.info(sql_url)
-                        cursor.execute(sql_url)
-                    cursor.execute("commit")
-                    logging.info("<<{}>>  save done".format(filmInfo["film_name"]))
+                        logging.info(sql)
+                        cursor = GyUtils.mysql_connect_cursor(host='10.10.11.161')
+                        cursor.execute(sql)
+
+                        for bof_url in bof_urls:
+                            sql_url = "insert into t_movies_url (uuid,film_name,film_url)values ('%s' , '%s' , '%s' )" \
+                                      % (filmInfo["uuid"], filmInfo["film_name"], bof_url)
+                            logging.info(sql_url)
+                            cursor.execute(sql_url)
+                        cursor.execute("commit")
+                        logging.info("<<{}>>  save done".format(filmInfo["film_name"]))
 
