@@ -66,11 +66,11 @@ def dict_2_insert_sql(d, table):
     return sql
 
 
-def mysql_connect_cursor():
-    host = '111.67.197.161'
-    user = 'root'
-    pasd = '1qaz!QAZ'
-    db = 'hayes'
+def mysql_connect_cursor(
+    host = '111.67.197.161',
+    user = 'root',
+    pasd = '1qaz!QAZ',
+    db = 'hayes'):
     try:
         conn = pymysql.connect(host=host, port=3306, user=user, password=pasd, db=db, charset='utf8',
                                cursorclass=pymysql.cursors.DictCursor)
