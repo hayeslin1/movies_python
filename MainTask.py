@@ -34,16 +34,16 @@ if __name__ == '__main__':
             filmInfo.pop("film_url")
             filmInfo["film_column"] = type[i-5]
             sql = GyUtils.dict_2_insert_sql(filmInfo,"t_movies")
-            logging.info(sql)
+            # logging.info(sql)
             cursor.execute(sql)
 
             for bof_url in bof_urls :
                 sql_url = "insert into t_movies_url (uuid,film_name,film_url)values ('%s' , '%s' , '%s' )" \
                           % (filmInfo["uuid"],filmInfo["film_name"], bof_url)
-                logging.info(sql_url)
+                # logging.info(sql_url)
                 cursor.execute(sql_url)
             cursor.execute("commit")
-            logging.info("<<{}>>  save done".format(filmInfo["film_name"]))
+            logging.info("<<{}>>{}集   save done".format(filmInfo["film_name"], len(bof_urls)))
         logging.info(url+">>>>> success")
 
 
