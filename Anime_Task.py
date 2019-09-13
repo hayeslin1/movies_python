@@ -79,7 +79,7 @@ class doTask():
                                   % (uuid, filmInfo["film_name"], bof_url)
                         logging.info(sql_url)
                         cursor.execute(sql_url)
-                sql = r"update t_anime set film_notes='{}'".format(filmInfo["film_notes"])
+                sql = r"update t_anime set film_notes='{}' where uuid='{}'".format(filmInfo["film_notes"],uuid)
                 cursor.execute(sql)
                 cursor.execute("commit")
             else:

@@ -43,7 +43,7 @@ if __name__ == '__main__':
                 # logging.info(sql_url)
                 cursor.execute(sql_url)
             cursor.execute("commit")
-            logging.info("<<{}>>{}集   save done".format(filmInfo["film_name"], len(bof_urls)))
+            logging.info("<<{}>>{}个播放资源   save done".format(filmInfo["film_name"], len(bof_urls)))
         logging.info(url+">>>>> success")
 
 
