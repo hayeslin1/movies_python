@@ -69,7 +69,7 @@ if __name__ == '__main__':
                             sql = GyUtils.dict_2_insert_sql(filmInfo, "t_media")
 
                         logging.info(sql)
-                        cursor = GyUtils.mysql_connect_cursor(host='10.10.11.161')
+                        cursor = GyUtils.mysql_connect_cursor()
                         cursor.execute(sql)
 
                         for bof_url in bof_urls:
