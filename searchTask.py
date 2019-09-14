@@ -68,15 +68,15 @@ if __name__ == '__main__':
                         elif data[ri-1][1].endswith("综艺"):
                             sql = GyUtils.dict_2_insert_sql(filmInfo, "t_media")
 
-                        logging.info(sql)
+                        # logging.info(sql)
                         cursor = GyUtils.mysql_connect_cursor()
                         cursor.execute(sql)
 
                         for bof_url in bof_urls:
                             sql_url = "insert into t_movies_url (uuid,film_name,film_url)values ('%s' , '%s' , '%s' )" \
                                       % (filmInfo["uuid"], filmInfo["film_name"], bof_url)
-                            logging.info(sql_url)
+                            # logging.info(sql_url)
                             cursor.execute(sql_url)
                         cursor.execute("commit")
-                        logging.info("<<{}>>  save done".format(filmInfo["film_name"]))
+                        logging.info("<<{}>>{}集   save done".format(filmInfo["film_name"], len(bof_urls)))
 
