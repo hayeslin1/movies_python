@@ -75,11 +75,10 @@ class doTask():
             if len(bof_urls) > muchJi:
                 for index, bof_url in enumerate(bof_urls):
                     if (index + 1) > muchJi:
-                        sql_url = "insert into t_movies_url (uuid,film_name,film_url)values ('%s' , '%s' , '%s' )" \
-                                  % (uuid, filmInfo["film_name"], bof_url)
+                        sql_url = "insert into t_movies_url (uuid,film_name,film_url)values ('%s' , '%s' , '%s' )" % (uuid, filmInfo["film_name"], bof_url)
                         logging.info(sql_url)
                         cursor.execute(sql_url)
-                sql = r"update t_anime set film_notes='{}' where uuid='{}'".format(filmInfo["film_notes"],uuid)
+                sql = r"update t_anime set film_notes='{}',film_update_time='{}'  where uuid='{}'".format(filmInfo["film_notes"],filmInfo["film_update_time"],uuid)
                 cursor.execute(sql)
                 cursor.execute("commit")
             else:
