@@ -72,7 +72,7 @@ def dict_2_insert_sql(d, table):
 
 
 def mysql_connect_cursor(
-    host = '111.67.197.161',
+    host = 'hayeslin.xyz',
     user = 'root',
     pasd = '1qaz!QAZ',
     db = 'movies'):
