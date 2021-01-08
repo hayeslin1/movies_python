@@ -23,6 +23,8 @@ python Media_Task.py
 python Anime_Task.py
 python searchTask.py
 
+## 可自行设置crontab定时任务
+
 ```
 
 
