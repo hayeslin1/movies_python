@@ -11,6 +11,14 @@
 + Anime_Task : 动漫爬虫
 + searchTask : 搜索爬虫
 
+## 视频站
+
++ 当前项目只是爬取数据并入库，并不具备展示和播放视频的功能。 
+
++ 有需要的小伙伴可以fork[这个项目]([http://](https://github.com/hayeslin1/hayes_tube))
+
++ 项目地址： https://github.com/hayeslin1/hayes_tube.git
+
 
 ## 启动脚本命令：
 ```shell 
